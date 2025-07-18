@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neo Snake - Retro Gaming Experience</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header -->
+        <header class="game-header">
+            <h1 class="game-title">
+                <span class="title-glow">NEO</span> SNAKE
+            </h1>
+            <div class="header-controls">
+                <button class="settings-btn" id="settingsBtn">⚙️</button>
+            </div>
+        </header>
+
+        <!-- Main Game Area -->
+        <main class="game-main">
+            <!-- Scoreboard -->
+            <div class="scoreboard glass-panel">
+                <div class="score-section">
+                    <div class="score-item">
+                        <span class="score-label">Score</span>
+                        <span class="score-value" id="currentScore">0</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="score-label">High Score</span>
+                        <span class="score-value neon-text" id="highScore">0</span>
+                    </div>
+                </div>
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Level</span>
+                        <span class="stat-value" id="level">1</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Speed</span>
+                        <span class="stat-value" id="speed">1x</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Length</span>
+                        <span class="stat-value" id="length">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Canvas Container -->
+            <div class="game-canvas-container glass-panel">
+                <canvas id="gameCanvas" width="600" height="400"></canvas>
+                
+                <!-- Game Overlay Screens -->
+                <div class="game-overlay" id="startScreen">
+                    <div class="overlay-content">
+                        <h2 class="overlay-title neon-text">Ready to Play?</h2>
+                        <p class="overlay-description">Control the snake with WASD or arrow keys</p>
+                        <p class="overlay-description mobile-only">Use touch controls to move</p>
+                        <button class="game-btn primary" id="startBtn">
+                            <span class="btn-glow">START GAME</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="game-overlay hidden" id="pauseScreen">
+                    <div class="overlay-content">
+                        <h2 class="overlay-title">Game Paused</h2>
+                        <button class="game-btn primary" id="resumeBtn">
+                            <span class="btn-glow">RESUME</span>
+                        </button>
+                        <button class="game-btn secondary" id="restartFromPause">RESTART</button>
+                    </div>
+                </div>
+
+                <div class="game-overlay hidden" id="gameOverScreen">
+                    <div class="overlay-content">
+                        <h2 class="overlay-title game-over-title">Game Over!</h2>
+                        <div class="final-score">
+                            <span class="final-score-label">Final Score</span>
+                            <span class="final-score-value neon-text" id="finalScore">0</span>
+                        </div>
+                        <div class="achievement" id="newHighScore" style="display: none;">
+                            <span class="achievement-text">🎉 NEW HIGH SCORE! 🎉</span>
+                        </div>
+                        <button class="game-btn primary" id="playAgainBtn">
+                            <span class="btn-glow">PLAY AGAIN</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Particle Effects Container -->
+                <div class="particle-container" id="particleContainer"></div>
+            </div>
+
+            <!-- Game Controls -->
+            <div class="game-controls glass-panel">
+                <div class="control-buttons">
+                    <button class="control-btn" id="pauseBtn">
+                        <span class="control-icon">⏸️</span>
+                        <span class="control-label">Pause</span>
+                    </button>
+                    <button class="control-btn" id="restartBtn">
+                        <span class="control-icon">🔄</span>
+                        <span class="control-label">Restart</span>
+                    </button>
+                </div>
+                
+                <!-- Mobile Touch Controls -->
+                <div class="touch-controls mobile-only">
+                    <div class="touch-dpad">
+                        <button class="dpad-btn up" data-direction="up">↑</button>
+                        <div class="dpad-middle">
+                            <button class="dpad-btn left" data-direction="left">←</button>
+                            <button class="dpad-btn right" data-direction="right">→</button>
+                        </div>
+                        <button class="dpad-btn down" data-direction="down">↓</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Settings Panel -->
+        <div class="settings-panel glass-panel hidden" id="settingsPanel">
+            <div class="settings-header">
+                <h3>Game Settings</h3>
+                <button class="close-btn" id="closeSettings">✕</button>
+            </div>
+            <div class="settings-content">
+                <div class="setting-group">
+                    <label class="setting-label">Initial Speed</label>
+                    <select class="setting-select" id="speedSetting">
+                        <option value="slow">Slow</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="fast">Fast</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Game Mode</label>
+                    <select class="setting-select" id="gameMode">
+                        <option value="classic" selected>Classic</option>
+                        <option value="modern">Modern</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Sound Effects</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="soundToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Instructions -->
+        <div class="instructions glass-panel">
+            <h4>How to Play</h4>
+            <div class="instruction-grid">
+                <div class="instruction-item">
+                    <span class="instruction-icon">⌨️</span>
+                    <span class="instruction-text">Use WASD or Arrow Keys</span>
+                </div>
+                <div class="instruction-item">
+                    <span class="instruction-icon">🍎</span>
+                    <span class="instruction-text">Eat food to grow & score</span>
+                </div>
+                <div class="instruction-item">
+                    <span class="instruction-icon">⚡</span>
+                    <span class="instruction-text">Speed increases with score</span>
+                </div>
+                <div class="instruction-item">
+                    <span class="instruction-icon">🚫</span>
+                    <span class="instruction-text">Don't hit walls or yourself</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
